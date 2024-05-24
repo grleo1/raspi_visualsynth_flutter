@@ -11,6 +11,8 @@ class MQTTService {
   final String password = 'nopass2day!';
   final String clientIdentifier = 'your_client_identifier';
 
+  //variable ifConnected -> publish nur möglich wenn verbunden
+
   MQTTService()
       : client = MqttBrowserClient('wss://mqtt.htl.services/htlstp/4BHIF/led', 'your_client_identifier') {
     client.port = port;
@@ -41,10 +43,9 @@ class MQTTService {
     }
 
     // Verbindung prüfen
-    if (client.connectionStatus?.state == MqttConnectionState.connected) {
-      print('MQTT Connected');
-    } else {
-      print('ERROR: MQTT Connection failed - disconnecting, state is ${client.connectionStatus?.state}');
+    if (client.connectionStatus?.state != MqttConnectionState.connected) {
+      print('ERROR: MQTT Connection failed - disconnecting, state is ${client
+          .connectionStatus?.state}');
       disconnect();
     }
   }
@@ -52,7 +53,6 @@ class MQTTService {
   // Trennen der Verbindung
   void disconnect() {
     client.disconnect();
-    print('Disconnected');
   }
 
   // Abonnieren eines Themas
@@ -68,6 +68,7 @@ class MQTTService {
     // Stelle sicher, dass der Payload nicht null ist
     final payload = builder.payload!;
     client.publishMessage(topic, MqttQos.atMostOnce, payload);
+    onPublished(topic, message);
   }
 
   // Callback-Funktionen
@@ -81,5 +82,8 @@ class MQTTService {
 
   void onSubscribed(String topic) {
     print('Subscribed to $topic');
+  }
+  void onPublished(String topic, String message) {
+    print('Published to $topic: $message');
   }
 }
