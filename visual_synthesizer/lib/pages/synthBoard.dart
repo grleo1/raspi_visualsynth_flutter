@@ -14,7 +14,7 @@ class _SynthBoardState extends State<SynthBoard> {
   @override
   Widget build(BuildContext context) {
 
-    //MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
+    MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +25,49 @@ class _SynthBoardState extends State<SynthBoard> {
           IconButton(onPressed: () {}, icon: Icon(Icons.add)),
         ],
       ),
-      body: Text("Synth Board"),
+      //ein SynthBoard ist ein Grid mit 8x8 Buttons (64 Buttons)
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 8,
+          childAspectRatio: 2.1,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemCount: 64,
+        itemBuilder: (context, index) {
+          return ElevatedButton(
+            //onHover -> Farbe ändern
+            onHover: (value) {
+              if (value) {
+                print('hover -> $index');
+              }
+            },
+
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.hovered)) {
+                      return Colors
+                          .green; // the color when the button is hovered over
+                    }
+                    return Colors.grey; // the default color
+                  },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+            onPressed: () {
+              mqttProvider.publish('htlstp/4BHIF/led', '$index');
+              print('pressed -> $index');
+              //mqttProvider.publish('htlstp/4BHIF/led', 'Hallo Welt');
+            },
+            child: Text(''),
+          );
+        },
+      ),
     );
   }
 }
