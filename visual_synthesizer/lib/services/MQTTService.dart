@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 
 class MQTTService {
@@ -21,6 +19,8 @@ class MQTTService {
     client.onDisconnected = onDisconnected;
     client.onConnected = onConnected;
     client.onSubscribed = onSubscribed;
+    client.onAutoReconnect = onAutoReconnect;
+    client.onAutoReconnected = onAutoReconnected;
     client.logging(on: false);
 
     final connMess = MqttConnectMessage()
@@ -85,5 +85,12 @@ class MQTTService {
   }
   void onPublished(String topic, String message) {
     print('Published to $topic: $message');
+  }
+
+  void onAutoReconnect() {
+    print('Auto Reconnect');
+  }
+  void onAutoReconnected() {
+    print('Auto Reconnected');
   }
 }

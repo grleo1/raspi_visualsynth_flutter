@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../util/mqttProvider.dart';
 
@@ -15,14 +18,16 @@ class _SynthBoardState extends State<SynthBoard> {
   Widget build(BuildContext context) {
 
     MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
+    final AudioPlayer audioPlayer = AudioPlayer();
+    audioPlayer.setSource(AssetSource('/testSound2.wav'));
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amberAccent,
         title: const Text("Synth Board", style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
-          const Text("features"),
-          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          const Text("for Navigation"),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
         ],
       ),
       //ein SynthBoard ist ein Grid mit 8x8 Buttons (64 Buttons)
@@ -47,8 +52,7 @@ class _SynthBoardState extends State<SynthBoard> {
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                     if (states.contains(MaterialState.hovered)) {
-                      return Colors
-                          .green; // the color when the button is hovered over
+                      return Colors.green; // the color when the button is hovered over
                     }
                     return Colors.grey; // the default color
                   },
@@ -60,11 +64,12 @@ class _SynthBoardState extends State<SynthBoard> {
               ),
             ),
             onPressed: () {
+              audioPlayer.resume();
               mqttProvider.publish('htlstp/4BHIF/led', '$index');
               print('pressed -> $index');
               //mqttProvider.publish('htlstp/4BHIF/led', 'Hallo Welt');
             },
-            child: Text(''),
+            child: const Text(''),
           );
         },
       ),

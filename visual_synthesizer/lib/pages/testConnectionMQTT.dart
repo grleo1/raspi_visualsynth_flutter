@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../util/mqttProvider.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 class TestConnectionMQTT extends StatefulWidget {
   const TestConnectionMQTT({super.key});
@@ -15,10 +17,12 @@ class _TestConnectionMQTTState extends State<TestConnectionMQTT> {
   Widget build(BuildContext context) {
 
     MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
+    
+    final AudioPlayer audioPlayer = AudioPlayer();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter MQTT Example'),
+        title: const Text('Flutter MQTT Example'),
       ),
       body: Center(
         child: Column(
@@ -28,19 +32,26 @@ class _TestConnectionMQTTState extends State<TestConnectionMQTT> {
               onPressed: () {
                 mqttProvider.connect();
               },
-              child: Text('Connect'),
+              child: const Text('Connect'),
             ),
             ElevatedButton(
               onPressed: () {
                 mqttProvider.publish('htlstp/4BHIF/led', 'Hallo Welt');
               },
-              child: Text('Publish to htlst/20220012/bla'),
+              child: const Text('Publish to htlst/20220012/bla'),
             ),
             ElevatedButton(
               onPressed: () {
                 mqttProvider.disconnect();
               },
-              child: Text('Disconnect'),
+              child: const Text('Disconnect'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await audioPlayer.setSource(AssetSource('/testSound2.wav'));
+                audioPlayer.resume();
+              },
+              child: const Text('play Sound'),
             ),
           ],
         ),
