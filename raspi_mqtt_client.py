@@ -2,13 +2,18 @@ import time
 import json
 import paho.mqtt.client as mqtt
 from sense_hat import SenseHat
-from colorsys import hsv_to_rgb
 
 MQTT_BROKER = "mqtt.htl.services"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 60
 MQTT_PUB_TOPIC = "htlstp/4BHIF/gruber"
-MQTT_SUB_TOPIC = "htlstp/4BHIF/led"
+MQTT_SUB_TOPICS = [
+    "htlstp/4BHIF/led",
+    "htlstp/4BHIF/colorInit",
+    "htlstp/4BHIF/colorWave",
+    "htlstp/4BHIF/speed",
+    "htlstp/4BHIF/smile"
+]
 MQTT_USERNAME = "htlstp"
 MQTT_PASSWORD = "nopass2day!"
 
@@ -17,27 +22,75 @@ sense = SenseHat()
 latest_temperature = 0
 latest_humidity = 0
 latest_pressure = 0
+initial_color = (0, 0, 0)
+wave_color = (255, 255, 255)
+wave_speed = 100
+
+# Define colors
+yellow = (255, 255, 0)
+red = (255, 0, 0)
+red_accent = (255, 82, 82)
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+smile_grid = [
+    [yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow],
+    [red, yellow, red, yellow, yellow, red, yellow, red],
+    [red, red, red, yellow, yellow, red, red, red],
+    [yellow, red, yellow, yellow, yellow, yellow, red, yellow],
+    [yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow],
+    [red_accent, yellow, black, white, white, black, red_accent, yellow],
+    [yellow, red_accent, yellow, black, black, yellow, red_accent, yellow],
+    [yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow]
+]
+
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
-    client.subscribe(MQTT_SUB_TOPIC)
+    for topic in MQTT_SUB_TOPICS:
+        client.subscribe(topic)
+
 
 def on_message(client, userdata, msg):
-    try:
-        index = int(msg.payload.decode())
-        print(f"Message received on topic {msg.topic}: {index}")
-        if 0 <= index <= 63:
-            wave_effect(index)
-    except ValueError:
-        print("Invalid message payload")
+    global initial_color, wave_color, wave_speed
+
+    payload = msg.payload.decode()
+    print(f"Message received on topic {msg.topic}: {payload}")
+
+    if msg.topic == "htlstp/4BHIF/led":
+        try:
+            index = int(payload)
+            if 0 <= index <= 63:
+                wave_effect(index)
+        except ValueError:
+            print("Invalid message payload for LED topic")
+
+    elif msg.topic == "htlstp/4BHIF/colorInit":
+        initial_color = parse_color(payload)
+        sense.clear(initial_color)
+
+    elif msg.topic == "htlstp/4BHIF/colorWave":
+        wave_color = parse_color(payload)
+
+    elif msg.topic == "htlstp/4BHIF/speed":
+        try:
+            wave_speed = int(payload)
+        except ValueError:
+            print("Invalid message payload for speed topic")
+
+    elif msg.topic == "htlstp/4BHIF/smile":
+        display_smile()
+
 
 def on_disconnect(client, userdata, rc):
     if rc != 0:
         print(f"Unexpected disconnection. Reconnecting...")
         client.reconnect()
 
+
 def on_log(client, userdata, level, buf):
     print(f"Log: {buf}")
+
 
 client = mqtt.Client()
 
@@ -49,6 +102,7 @@ client.on_disconnect = on_disconnect
 client.on_log = on_log
 
 client.connect(MQTT_BROKER, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
+
 
 def publish_sensor_data():
     global latest_temperature, latest_humidity, latest_pressure
@@ -70,29 +124,47 @@ def publish_sensor_data():
 
         time.sleep(10)
 
-def hsv_to_rgb_normalized(h, s, v):
-    rgb = hsv_to_rgb(h, s, v)
-    return tuple(int(255 * c) for c in rgb)
+
+def parse_color(color_string):
+    try:
+        color_hex = color_string.split('Color (')[1].split(')')[0]
+        color_int = int(color_hex, 16)
+        r = (color_int >> 16) & 0xFF
+        g = (color_int >> 8) & 0xFF
+        b = color_int & 0xFF
+        return (r, g, b)
+    except (IndexError, ValueError):
+        print("Invalid color format")
+        return (0, 0, 0)
+
 
 def wave_effect(start_index):
-    sense.clear()
+    sense.clear(initial_color)
     x_start = start_index % 8
     y_start = start_index // 8
 
-    hue = (latest_temperature / 40) % 1.0  # Normalize temperature to [0, 1] (assuming max 40°C)
-    saturation = latest_humidity / 100.0  # Normalize humidity to [0, 1]
-    value = (latest_pressure - 900) / 200.0  # Normalize pressure to [0, 1] (assuming range 900-1100 hPa)
-
-    for radius in range(8):
-        color = hsv_to_rgb_normalized((hue + radius / 8.0) % 1.0, saturation, value)
+    for radius in range(1, 9):
+        color = wave_color
         for x in range(max(0, x_start - radius), min(8, x_start + radius + 1)):
             for y in range(max(0, y_start - radius), min(8, y_start + radius + 1)):
                 if abs(x - x_start) == radius or abs(y - y_start) == radius:
                     sense.set_pixel(x, y, color)
-        time.sleep(0.1)
+        time.sleep(wave_speed / 1000.0)
+        for x in range(max(0, x_start - radius), min(8, x_start + radius + 1)):
+            for y in range(max(0, y_start - radius), min(8, y_start + radius + 1)):
+                if abs(x - x_start) == radius or abs(y - y_start) == radius:
+                    sense.set_pixel(x, y, initial_color)
 
     time.sleep(1)
+    sense.clear(initial_color)
+
+
+def display_smile():
     sense.clear()
+    for y, row in enumerate(smile_grid):
+        for x, color in enumerate(row):
+            sense.set_pixel(x, y, color)
+
 
 client.loop_start()
 
