@@ -48,7 +48,9 @@ class _WaveGridState extends State<WaveGrid> {
                       await Future.delayed(gridProvider.waveDuration * 2);
 
                       var field = y + 8 * x;
-                      mqttProvider.publish('htlstp/4BHIF/led', '$field');
+                      var color = gridProvider.waveColor;
+
+                      mqttProvider.publish('htlstp/4BHIF/led', '$field $color');
 
                       gridProvider.playSound(x, y);
                     }
@@ -65,7 +67,9 @@ class _WaveGridState extends State<WaveGrid> {
                     gridProvider.changeColorWave(x, y);
 
                     var field = y + 8 * x;
-                    mqttProvider.publish('htlstp/4BHIF/led', '$field');
+                    var color = gridProvider.waveColor;
+
+                    mqttProvider.publish('htlstp/4BHIF/led', '$field $color');
 
                     gridProvider.playSound(x, y);
                   },
