@@ -20,17 +20,6 @@ class _HomeState extends State<Home> {
     MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
     GridProvider gridProvider = Provider.of<GridProvider>(context);
 
-    List<Color> colors = [
-      Colors.red,
-      Colors.green,
-      Colors.blue,
-      Colors.yellow,
-      Colors.purple,
-      Colors.orange,
-      Colors.pink,
-      Colors.teal,
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Visual Synthesizer', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -103,7 +92,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors.map((color) {
+                  children: gridProvider.colors.map((color) {
                     return GestureDetector(
                       onTap: () {
                         gridProvider.waveColor = color;
@@ -146,7 +135,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors.map((color) {
+                  children: gridProvider.colors.map((color) {
                     return GestureDetector(
                       onTap: () {
                         gridProvider.initialColor = color;

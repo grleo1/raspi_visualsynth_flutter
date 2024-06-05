@@ -21,7 +21,19 @@ class GridProvider extends ChangeNotifier {
     _audioPlayer.setSource(AssetSource('/testSound2.wav'));
   }
 
+  final List<Color> _colors = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.purple,
+    Colors.orange,
+    Colors.pink,
+    Colors.teal,
+  ];
 
+
+  List<Color> get colors => _colors;
 
   void changeColorWave(int x, int y) async {
     _gridColors[x][y] = _waveColor;

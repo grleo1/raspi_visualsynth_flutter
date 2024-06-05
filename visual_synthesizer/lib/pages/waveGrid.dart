@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ class _WaveGridState extends State<WaveGrid> {
 
     MQTTProvider mqttProvider = Provider.of<MQTTProvider>(context);
     GridProvider gridProvider = Provider.of<GridProvider>(context);
+    Random random = Random();
 
     return Scaffold(
       appBar: AppBar(
@@ -47,8 +50,13 @@ class _WaveGridState extends State<WaveGrid> {
                     }
                   },
                   onDoubleTap: () async {
-                    gridProvider.initialColor = Colors.green;
-                    gridProvider.waveColor = Colors.red;
+                    var initialNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
+                    var waveNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
+                    while (initialNum == waveNum) {
+                      waveNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
+                    }
+                    gridProvider.initialColor = initialNum;
+                    gridProvider.waveColor = waveNum;
 
                     gridProvider.changeColorWave(x, y);
                     var field = y + 8 * x;
