@@ -173,6 +173,8 @@ class _HomeState extends State<Home> {
                 ),
                 ElevatedButton(
                     onPressed: () {
+                      mqttProvider.publish('htlstp/4BHIF/speed', '${gridProvider.waveDuration.inMilliseconds}');
+
                       Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {

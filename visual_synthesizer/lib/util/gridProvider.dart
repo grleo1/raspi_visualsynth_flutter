@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GridProvider extends ChangeNotifier {
@@ -110,7 +109,7 @@ class GridProvider extends ChangeNotifier {
     _waveColor = Colors.red;
     changeColorWave(4, 4);
 
-    await Future.delayed(const Duration(milliseconds: 900));
+    await Future.delayed(const Duration(milliseconds: 1200));
     _gridColors = [
       [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,],
       [Colors.red,Colors.yellow,Colors.red,Colors.yellow,Colors.yellow,Colors.red,Colors.yellow,Colors.red,],

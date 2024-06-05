@@ -30,6 +30,7 @@ class _WaveGridState extends State<WaveGrid> {
           IconButton(
               onPressed: () {
                 gridProvider.smiley();
+                mqttProvider.publish('htlstp/4BHIF/smile', 'smile');
               },
               icon: const Icon(Icons.add)),
         ],
@@ -48,10 +49,9 @@ class _WaveGridState extends State<WaveGrid> {
                       await Future.delayed(gridProvider.waveDuration * 2);
 
                       var field = y + 8 * x;
-                      var color = gridProvider.waveColor;
-
-                      mqttProvider.publish('htlstp/4BHIF/led', '$field $color');
-
+                      mqttProvider.publish('htlstp/4BHIF/led', '$field');
+                      mqttProvider.publish('htlstp/4BHIF/colorWave', '${gridProvider.waveColor}');
+                      mqttProvider.publish('htlstp/4BHIF/colorInit', '${gridProvider.initialColor}');
                       gridProvider.playSound(x, y);
                     }
                   },
@@ -67,9 +67,10 @@ class _WaveGridState extends State<WaveGrid> {
                     gridProvider.changeColorWave(x, y);
 
                     var field = y + 8 * x;
-                    var color = gridProvider.waveColor;
 
-                    mqttProvider.publish('htlstp/4BHIF/led', '$field $color');
+                    mqttProvider.publish('htlstp/4BHIF/led', '$field');
+                    mqttProvider.publish('htlstp/4BHIF/colorWave', '${gridProvider.waveColor}');
+                    mqttProvider.publish('htlstp/4BHIF/colorInit', '${gridProvider.initialColor}');
 
                     gridProvider.playSound(x, y);
                   },
@@ -81,7 +82,6 @@ class _WaveGridState extends State<WaveGrid> {
                     width: 70,
                     height: 70,
                     margin: EdgeInsets.all(2),
-                    //color: gridProvider.gridColors[x][y],
                   ),
                 );
               }),

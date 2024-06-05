@@ -12,7 +12,7 @@ class MQTTService {
   //variable ifConnected -> publish nur möglich wenn verbunden
 
   MQTTService()
-      : client = MqttBrowserClient('wss://mqtt.htl.services/htlstp/4BHIF/led', 'your_client_identifier') {
+      : client = MqttBrowserClient('wss://mqtt.htl.services/htlstp/4BHIF/', 'your_client_identifier') {
     client.port = port;
     client.keepAlivePeriod = 20;
 
