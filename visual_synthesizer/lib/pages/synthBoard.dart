@@ -1,3 +1,12 @@
+
+
+// D E L E T E   T H I S
+
+
+
+
+
+/*
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -76,3 +85,4 @@ class _SynthBoardState extends State<SynthBoard> {
     );
   }
 }
+ */

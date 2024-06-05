@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:visual_synthesizer/pages/synthBoard.dart';
+import 'package:visual_synthesizer/pages/waveGrid.dart';
+import 'util/gridProvider.dart';
 import 'util/mqttProvider.dart';
 import 'package:provider/provider.dart';
 import 'pages/testConnectionMQTT.dart';
 
 void main() => runApp(
-  ChangeNotifierProvider(
-    create: (context) => MQTTProvider(),
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => MQTTProvider()),
+      ChangeNotifierProvider(create: (context) => GridProvider()),
+    ],
     child: const MyApp(),
   ),
 );
@@ -16,10 +21,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'raspi mqtt flutter schme',
-      home: SynthBoard(),
+      home: WaveGrid(),
     );
   }
 }
