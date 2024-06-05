@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,21 +7,34 @@ import 'package:flutter/material.dart';
 
 class GridProvider extends ChangeNotifier {
   int _gridSize = 8;
-  Duration _waveDuration = Duration(milliseconds: 100);
-  AudioPlayer _audioPlayer = AudioPlayer();
+  Duration _waveDuration = const Duration(milliseconds: 100);
 
   Color _initialColor = Colors.grey;
   Color _waveColor = Colors.blue;
   int _waveCount = 1;
 
   List<List<Color>> _gridColors = [];
+  
+  List<List<int>> _audioInfo = [];
+
+  final AudioPlayer audioPlayerLove = AudioPlayer();
+
 
   GridProvider() {
     _gridColors = List.generate(
       _gridSize,
       (i) => List.generate(_gridSize, (j) => _initialColor),
     );
-    _audioPlayer.setSource(AssetSource('/testSound2.wav'));
+    _audioInfo = List.generate(
+      _gridSize,
+          (i) => List.generate(_gridSize, (j) => 0),
+    );
+    for (int i = 0; i < _audioInfo.length; i++) {
+      for (int j = 0; j < _audioInfo[i].length; j++) {
+        int sound = (i * _audioInfo.length + j) % 16 + 1;
+        _audioInfo[i][j] = sound;
+      }
+    }
   }
 
   final List<Color> _colors = [
@@ -80,10 +94,22 @@ class GridProvider extends ChangeNotifier {
     }
   }
 
+  void playSound(x, y) async {
+    AudioPlayer audioPlayer = AudioPlayer();
+    int number = _audioInfo[x][y];
+
+    await audioPlayer.setSource(AssetSource('/$number.wav'));
+    await audioPlayer.resume();
+  }
+
   void smiley() async{
+    await audioPlayerLove.setSource(AssetSource('/love.wav'));
+    await audioPlayerLove.resume();
+
     _initialColor = Colors.yellow;
-    _waveColor = Colors.black;
+    _waveColor = Colors.red;
     changeColorWave(4, 4);
+
     await Future.delayed(const Duration(milliseconds: 900));
     _gridColors = [
       [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,],
@@ -96,8 +122,10 @@ class GridProvider extends ChangeNotifier {
       [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,]
     ];
     notifyListeners();
+    await Future.delayed(const Duration(seconds: 10));
+    audioPlayerLove.stop();
+    notifyListeners();
   }
-  AudioPlayer get audioPlayer => _audioPlayer;
 
   Duration get waveDuration => _waveDuration;
 

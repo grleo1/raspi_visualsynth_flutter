@@ -24,10 +24,6 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('Visual Synthesizer', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blue,
-        actions: [
-          const Text("for Navigation"),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-        ],
       ),
       body: Center(
         child: Container(

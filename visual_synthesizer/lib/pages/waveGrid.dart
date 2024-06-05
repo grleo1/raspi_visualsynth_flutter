@@ -27,7 +27,6 @@ class _WaveGridState extends State<WaveGrid> {
         title: const Text('SynthBoard', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blue,
         actions: [
-          const Text("for Navigation"),
           IconButton(
               onPressed: () {
                 gridProvider.smiley();
@@ -51,7 +50,7 @@ class _WaveGridState extends State<WaveGrid> {
                       var field = y + 8 * x;
                       mqttProvider.publish('htlstp/4BHIF/led', '$field');
 
-                      gridProvider.audioPlayer.resume();
+                      gridProvider.playSound(x, y);
                     }
                   },
                   onDoubleTap: () async {
@@ -64,10 +63,11 @@ class _WaveGridState extends State<WaveGrid> {
                     gridProvider.waveColor = waveNum;
 
                     gridProvider.changeColorWave(x, y);
+
                     var field = y + 8 * x;
                     mqttProvider.publish('htlstp/4BHIF/led', '$field');
 
-                    gridProvider.audioPlayer.resume();
+                    gridProvider.playSound(x, y);
                   },
                   child: Container(
                     decoration: BoxDecoration(
