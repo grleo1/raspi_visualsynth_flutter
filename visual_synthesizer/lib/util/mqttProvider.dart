@@ -16,7 +16,8 @@ class MQTTProvider extends ChangeNotifier{
     notifyListeners();
   }
   void publish(String topic, String message){
-    _mqttService.publish(topic, message);
+    //_mqttService.publish(topic, message);
+    print("darad jzt publishn auf -> \n$topic mit message -> $message");
     notifyListeners();
   }
 }

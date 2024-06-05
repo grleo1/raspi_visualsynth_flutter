@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:visual_synthesizer/pages/synthBoard.dart';
 import 'package:visual_synthesizer/pages/waveGrid.dart';
+import 'pages/home.dart';
 import 'util/gridProvider.dart';
 import 'util/mqttProvider.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'raspi mqtt flutter schme',
-      home: WaveGrid(),
+      home: Home(),
     );
   }
 }

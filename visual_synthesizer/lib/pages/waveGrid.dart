@@ -21,7 +21,11 @@ class _WaveGridState extends State<WaveGrid> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wave Grid'),
+        title: const Text('SynthBoard', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blue,
+        actions: [
+          const Text("for Navigation"),
+        ],
       ),
       body: Center(
         child: Column(
@@ -39,9 +43,7 @@ class _WaveGridState extends State<WaveGrid> {
                       var field = y + 8 * x;
                       mqttProvider.publish('htlstp/4BHIF/led', '$field');
 
-                      final AudioPlayer audioPlayer = AudioPlayer();
-                      await audioPlayer.setSource(AssetSource('/testSound2.wav'));
-                      await audioPlayer.resume();
+                      gridProvider.audioPlayer.resume();
                     }
                   },
                   onDoubleTap: () async {
@@ -52,15 +54,17 @@ class _WaveGridState extends State<WaveGrid> {
                     var field = y + 8 * x;
                     mqttProvider.publish('htlstp/4BHIF/led', '$field');
 
-                    final AudioPlayer audioPlayer = AudioPlayer();
-                    await audioPlayer.setSource(AssetSource('/testSound2.wav'));
-                    await audioPlayer.resume();
+                    gridProvider.audioPlayer.resume();
                   },
                   child: Container(
+                    decoration: BoxDecoration(
+                      color: gridProvider.gridColors[x][y],
+                      border: Border.all(color: Colors.black12, width: 5),
+                    ),
                     width: 70,
                     height: 70,
                     margin: EdgeInsets.all(2),
-                    color: gridProvider.gridColors[x][y],
+                    //color: gridProvider.gridColors[x][y],
                   ),
                 );
               }),
