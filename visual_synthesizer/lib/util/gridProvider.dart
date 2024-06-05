@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +79,24 @@ class GridProvider extends ChangeNotifier {
       }
     }
   }
+
+  void smiley() async{
+    _initialColor = Colors.yellow;
+    _waveColor = Colors.black;
+    changeColorWave(4, 4);
+    await Future.delayed(const Duration(milliseconds: 900));
+    _gridColors = [
+      [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,],
+      [Colors.red,Colors.yellow,Colors.red,Colors.yellow,Colors.yellow,Colors.red,Colors.yellow,Colors.red,],
+      [Colors.red,Colors.red,Colors.red,Colors.yellow,Colors.yellow,Colors.red,Colors.red,Colors.red,],
+      [Colors.yellow,Colors.red,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.red,Colors.yellow,],
+      [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,],
+      [Colors.redAccent.shade100,Colors.yellow,Colors.black,Colors.white,Colors.white,Colors.black,Colors.redAccent.shade100,Colors.yellow,],
+      [Colors.yellow,Colors.redAccent.shade100,Colors.yellow,Colors.black,Colors.black,Colors.yellow,Colors.yellow,Colors.redAccent.shade100],
+      [Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,Colors.yellow,]
+    ];
+    notifyListeners();
+  }
   AudioPlayer get audioPlayer => _audioPlayer;
 
   Duration get waveDuration => _waveDuration;
@@ -109,5 +129,9 @@ class GridProvider extends ChangeNotifier {
   set waveDuration(Duration value) {
     _waveDuration = value;
     notifyListeners();
+  }
+
+  set gridColors(List<List<Color>> value) {
+    _gridColors = value;
   }
 }

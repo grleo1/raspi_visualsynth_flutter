@@ -28,6 +28,11 @@ class _WaveGridState extends State<WaveGrid> {
         backgroundColor: Colors.blue,
         actions: [
           const Text("for Navigation"),
+          IconButton(
+              onPressed: () {
+                gridProvider.smiley();
+              },
+              icon: const Icon(Icons.add)),
         ],
       ),
       body: Center(
