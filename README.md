@@ -6,14 +6,14 @@ Die Verbindung ermöglicht die bidirektionale Datenübertragung
 zwischen dem Raspberry Pi und der Flutter-App über den MQTT-Broker.
 
 ## Voraussetzungen
-Raspberry Pi mit Python-Umgebung
+Raspberry Pi mit Python-Umgebung und SenseHat
 Ein MQTT-Broker (z. B. Mosquitto)
 Flutter-Entwicklungsumgebung
 
 ## Installation
 ### Raspberry Pi Python Setup:
 
-Stellen Sie sicher, dass Ihr Raspberry Pi einsatzbereit ist und über eine Python-Umgebung verfügt.
+Stellen Sie sicher, dass Ihr Raspberry Pi einsatzbereit ist und über eine Python-Umgebung und den SenseHat verfügt.
 Installieren Sie das MQTT-Bibliothek für Python, apt install python3-paho-mqtt
 
 ### MQTT-Broker Setup:
