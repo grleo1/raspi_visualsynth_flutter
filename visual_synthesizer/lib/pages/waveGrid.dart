@@ -46,7 +46,7 @@ class _WaveGridState extends State<WaveGrid> {
                   onTap: () async {
                     for (int i = 0; i < gridProvider.waveCount; i++){
                       gridProvider.changeColorWave(x, y);
-                      await Future.delayed(gridProvider.waveDuration * 2);
+                      await Future.delayed(gridProvider.waveDuration);
 
                       var field = y + 8 * x;
                       mqttProvider.publish('htlstp/4BHIF/led', '$field');

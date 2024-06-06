@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'raspi mqtt flutter schme',
+      title: 'S Y N T H E S I Z E R',
       home: Home(),
     );
   }
