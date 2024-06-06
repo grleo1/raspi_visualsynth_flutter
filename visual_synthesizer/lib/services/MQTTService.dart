@@ -63,12 +63,19 @@ class MQTTService {
   // Nachrichten veröffentlichen
   void publish(String topic, String message) {
     final builder = MqttClientPayloadBuilder();
-    builder.addString(message);
 
-    // Stelle sicher, dass der Payload nicht null ist
-    final payload = builder.payload!;
-    client.publishMessage(topic, MqttQos.atMostOnce, payload);
-    onPublished(topic, message);
+    if (client.connectionStatus?.state == MqttConnectionState.connected) {
+      builder.addString(message);
+
+      final payload = builder.payload!;
+      client.publishMessage(topic, MqttQos.atMostOnce, payload);
+
+      onPublished(topic, message);
+    }
+    else{
+      print('MQTT Connection failed -> ${client.connectionStatus?.state}');
+      disconnect();
+    }
   }
 
   // Callback-Funktionen

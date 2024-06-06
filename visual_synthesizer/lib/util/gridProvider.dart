@@ -50,6 +50,21 @@ class GridProvider extends ChangeNotifier {
 
   List<Color> get colors => _colors;
 
+  void changeColorCross(int x, int y) async {
+
+    for (int i = 0; i < _gridSize; i++) {
+      _gridColors[x][i] = _waveColor;
+      _gridColors[i][y] = _waveColor;
+    }
+    notifyListeners();
+    await Future.delayed(_waveDuration*10);
+    for (int i = 0; i < _gridSize; i++) {
+      _gridColors[x][i] = _initialColor;
+      _gridColors[i][y] = _initialColor;
+    }
+    notifyListeners();
+  }
+
   void changeColorWave(int x, int y) async {
     _gridColors[x][y] = _waveColor;
     notifyListeners();
@@ -58,8 +73,7 @@ class GridProvider extends ChangeNotifier {
     _gridColors[x][y] = _initialColor;
     notifyListeners();
 
-    for (int i = 1; i < _gridSize * 2; i++) {
-      // gridSize*2 -> welle über ganzes Grid
+    for (int i = 1; i < _gridSize * 2; i++) { // gridSize*2 -> welle über ganzes Grid
       bool anyChanges = false;
       for (int dx = -i; dx <= i; dx++) {
         for (int dy = -i; dy <= i; dy++) {

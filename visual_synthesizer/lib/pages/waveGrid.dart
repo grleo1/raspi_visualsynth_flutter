@@ -26,7 +26,13 @@ class _WaveGridState extends State<WaveGrid> {
       appBar: AppBar(
         title: const Text('SynthBoard', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blue,
+        leading: Image.asset('assets/icon.png'),
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back)),
           IconButton(
               onPressed: () {
                 gridProvider.smiley();
@@ -73,6 +79,11 @@ class _WaveGridState extends State<WaveGrid> {
                     mqttProvider.publish('htlstp/4BHIF/colorInit', '${gridProvider.initialColor}');
 
                     gridProvider.playSound(x, y);
+                  },
+                  onLongPress: () {
+                    gridProvider.changeColorCross(x, y);
+
+
                   },
                   child: Container(
                     decoration: BoxDecoration(

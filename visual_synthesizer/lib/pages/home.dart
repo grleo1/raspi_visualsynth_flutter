@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('Visual Synthesizer', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blue,
+        leading: Image.asset('assets/icon.png'),
       ),
       body: Center(
         child: Container(
