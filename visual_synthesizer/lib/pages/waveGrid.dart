@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:visual_synthesizer/util/gridProvider.dart';
@@ -56,16 +55,16 @@ class _WaveGridState extends State<WaveGrid> {
 
                       var field = y + 8 * x;
                       mqttProvider.publish('htlstp/4BHIF/led', '$field');
-                      mqttProvider.publish('htlstp/4BHIF/colorWave', '${gridProvider.waveColor}');
-                      mqttProvider.publish('htlstp/4BHIF/colorInit', '${gridProvider.initialColor}');
+                      mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.waveColor).key);
+                      mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.initialColor).key);
                       gridProvider.playSound(x, y);
                     }
                   },
                   onDoubleTap: () async {
-                    var initialNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
-                    var waveNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
+                    var initialNum = gridProvider.colors.values.elementAt(random.nextInt(gridProvider.colors.length));
+                    var waveNum = gridProvider.colors.values.elementAt(random.nextInt(gridProvider.colors.length));
                     while (initialNum == waveNum) {
-                      waveNum = gridProvider.colors[random.nextInt(gridProvider.colors.length)];
+                      waveNum = gridProvider.colors.values.elementAt(random.nextInt(gridProvider.colors.length));
                     }
                     gridProvider.initialColor = initialNum;
                     gridProvider.waveColor = waveNum;
@@ -73,10 +72,9 @@ class _WaveGridState extends State<WaveGrid> {
                     gridProvider.changeColorWave(x, y);
 
                     var field = y + 8 * x;
-
                     mqttProvider.publish('htlstp/4BHIF/led', '$field');
-                    mqttProvider.publish('htlstp/4BHIF/colorWave', '${gridProvider.waveColor}');
-                    mqttProvider.publish('htlstp/4BHIF/colorInit', '${gridProvider.initialColor}');
+                    mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.waveColor).key);
+                    mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.initialColor).key);
 
                     gridProvider.playSound(x, y);
                   },

@@ -36,19 +36,20 @@ class GridProvider extends ChangeNotifier {
     }
   }
 
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.purple,
-    Colors.orange,
-    Colors.pink,
-    Colors.teal,
-  ];
+  final Map<String, Color> _colors = {
+    'red': Colors.red,
+    'green': Colors.green,
+    'blue': Colors.blue,
+    'yellow': Colors.yellow,
+    'purple': Colors.purple,
+    'orange': Colors.orange,
+    'pink': Colors.pink,
+    'teal': Colors.teal,
+    'grey': Colors.grey,
+  };
 
 
-  List<Color> get colors => _colors;
+  Map<String, Color> get colors => _colors;
 
   void changeColorCross(int x, int y) async {
 

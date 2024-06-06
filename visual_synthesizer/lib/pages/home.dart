@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: gridProvider.colors.map((color) {
+                  children: gridProvider.colors.values.map((color) {
                     return GestureDetector(
                       onTap: () {
                         gridProvider.waveColor = color;
@@ -132,7 +132,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: gridProvider.colors.map((color) {
+                  children: gridProvider.colors.values.map((color) {
                     return GestureDetector(
                       onTap: () {
                         gridProvider.initialColor = color;
