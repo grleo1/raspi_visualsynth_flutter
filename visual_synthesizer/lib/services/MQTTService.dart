@@ -9,7 +9,6 @@ class MQTTService {
   final String password = 'nopass2day!';
   final String clientIdentifier = 'your_client_identifier';
 
-  //variable ifConnected -> publish nur möglich wenn verbunden
 
   MQTTService()
       : client = MqttBrowserClient('wss://mqtt.htl.services/htlstp/4BHIF/', 'your_client_identifier') {

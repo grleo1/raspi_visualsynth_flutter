@@ -38,6 +38,13 @@ class _WaveGridState extends State<WaveGrid> {
                 mqttProvider.publish('htlstp/4BHIF/smile', 'smile');
               },
               icon: const Icon(Icons.add)),
+          Switch(
+            value: gridProvider.sensorColors, onChanged: (value) {
+              gridProvider.sensorColors = value;
+              mqttProvider.publish('htlstp/4BHIF/data', gridProvider.sensorColors?'1':'0');
+            },
+
+          )
         ],
       ),
       body: Center(
@@ -55,8 +62,14 @@ class _WaveGridState extends State<WaveGrid> {
 
                       var field = y + 8 * x;
                       mqttProvider.publish('htlstp/4BHIF/led', '$field');
+                    if(gridProvider.sensorColors == false){
                       mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.waveColor).key);
                       mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.initialColor).key);
+                    }
+                    else{
+                      mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.keys.elementAt(random.nextInt(9)));
+                      mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.keys.elementAt(random.nextInt(9)));
+                    }
                       gridProvider.playSound(x, y);
                     }
                   },
@@ -73,8 +86,15 @@ class _WaveGridState extends State<WaveGrid> {
 
                     var field = y + 8 * x;
                     mqttProvider.publish('htlstp/4BHIF/led', '$field');
-                    mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.waveColor).key);
-                    mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.initialColor).key);
+
+                    if(gridProvider.sensorColors == false){
+                      mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.waveColor).key);
+                      mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.entries.firstWhere((entry) => entry.value == gridProvider.initialColor).key);
+                    }
+                    else{
+                      mqttProvider.publish('htlstp/4BHIF/colorWave', gridProvider.colors.keys.elementAt(random.nextInt(9)));
+                      mqttProvider.publish('htlstp/4BHIF/colorInit', gridProvider.colors.keys.elementAt(random.nextInt(9)));
+                    }
 
                     gridProvider.playSound(x, y);
                   },
@@ -88,8 +108,8 @@ class _WaveGridState extends State<WaveGrid> {
                       color: gridProvider.gridColors[x][y],
                       border: Border.all(color: Colors.black12, width: 5),
                     ),
-                    width: 70,
-                    height: 70,
+                    width: 70, // 45 für handy | 70 für web
+                    height: 70,// 45 für handy | 70 für web
                     margin: EdgeInsets.all(2),
                   ),
                 );

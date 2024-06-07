@@ -36,6 +36,16 @@ class GridProvider extends ChangeNotifier {
     }
   }
 
+  bool _sensorColors = false;
+
+
+  bool get sensorColors => _sensorColors;
+
+  set sensorColors(bool value) {
+    _sensorColors = value;
+    notifyListeners();
+  }
+
   final Map<String, Color> _colors = {
     'red': Colors.red,
     'green': Colors.green,
